@@ -5,8 +5,9 @@ import { createWeReadClient, SKILL_VERSION, syncWeRead, WeReadError } from "./we
 import { askOpenAI, DEFAULT_MODEL, OpenAIProviderError, validOpenAIKey } from "./openai-provider.mjs";
 
 const port = Number(process.env.PORT || 4173);
-const root = process.cwd();
-const envPath = join(root, ".env.local");
+const root = process.env.READING_ARCHIVE_ROOT || process.cwd();
+const envPath = join(process.env.READING_ARCHIVE_DATA_DIR || root, ".env.local");
+const desktopToken = process.env.READING_ARCHIVE_DESKTOP_TOKEN;
 let wereadApiKey = process.env.WEREAD_API_KEY || "";
 let openaiApiKey = process.env.OPENAI_API_KEY || "";
 let openaiModel = process.env.OPENAI_MODEL || DEFAULT_MODEL;
@@ -56,7 +57,12 @@ async function saveEnvValue(name, value) {
 }
 
 const server = http.createServer(async (request, response) => {
-  const pathname = decodeURIComponent(new URL(request.url, `http://${request.headers.host}`).pathname);
+  if (desktopToken && request.headers["x-reading-archive-token"] !== desktopToken) {
+    return json(response, 403, { error: "Desktop session required" });
+  }
+  let pathname;
+  try { pathname = decodeURIComponent(new URL(request.url, "http://localhost").pathname); }
+  catch { return json(response, 400, { error: "Invalid URL" }); }
 
   if (pathname === "/api/weread/status" && request.method === "GET") {
     return json(response, 200, { configured: Boolean(wereadApiKey), keyHint: wereadApiKey ? `wrk-••••${wereadApiKey.slice(-4)}` : "", skillVersion: SKILL_VERSION });
@@ -148,6 +154,12 @@ const server = http.createServer(async (request, response) => {
   }
 });
 
-server.listen(port, "0.0.0.0", () => {
-  console.log(`Reading Archive: http://localhost:${port}`);
+export { server };
+export const ready = new Promise((resolve, reject) => {
+  server.once("error", reject);
+  server.listen(port, "127.0.0.1", () => {
+    console.log(`Reading Archive: http://localhost:${server.address().port}`);
+    resolve(server.address());
+  });
 });
+await ready;

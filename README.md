@@ -1,4 +1,21 @@
-# Reading Archive — Phase 4.1（视觉舒适度优化）
+# Reading Archive — Windows 0.7.0 预览版
+
+## Windows 安装与迁移
+
+在 GitHub 的 Actions → Windows installer 中打开最新成功任务，在 Artifacts 下载
+`Reading-Archive-Windows-x64`，解压后运行其中的 Setup.exe。安装后通过桌面图标启动，
+无需安装 Node.js。仅提供 Windows x64；首版未签名，尚需 Windows 实机验收。
+
+首次迁移：在原浏览器版本导出 JSON，然后到桌面版“导入”页面选择文件，检查预览后导入。
+微信读书与 AI 连接在桌面版重新配置。菜单“阅读档案”提供迁移说明与数据目录入口。
+
+数据保存在 `%APPDATA%/ReadingArchive`，与安装目录分离，升级和默认卸载不会删除数据。
+连接密钥目前保存在该目录的 `.env.local` 中（明文），不要分享整个数据目录。
+请定期导出 JSON 备份。桌面服务只监听本机 4174 端口，并要求每次启动生成的会话凭据。
+端口被占用时应用会提示退出，不会切换地址导致档案看似丢失。
+
+开发：`npm ci` 后运行 `npm run desktop`；Windows 本地打包运行 `npm run build:win`。
+每次同步 main 自动构建安装包，保留 30 天；首版不含自动更新。
 
 一个本地优先的个人阅读档案原型。它不是读书打卡工具，而是将书籍、划线、点评和待整理想法放进同一个可检索档案。
 

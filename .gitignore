@@ -5,6 +5,7 @@
 
 # Dependencies and logs
 node_modules/
+dist/
 *.log
 npm-debug.log*
 
