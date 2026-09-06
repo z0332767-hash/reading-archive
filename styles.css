@@ -385,6 +385,21 @@ code { padding: 1px 4px; background: var(--paper-deep); font: 11px var(--mono); 
 .map-empty h2 { color: var(--ink); }
 .map-empty .button { margin-top: 12px; }
 
+/* Display preferences keep the original quote typography. */
+#display-settings { width: min(560px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); box-sizing: border-box; overflow-y: auto; padding: clamp(20px, 4vw, 32px); border: 1px solid var(--line); border-radius: 18px; color: var(--ink); background: var(--surface); box-shadow: var(--soft-shadow); }
+#display-settings::backdrop { background: rgb(8 15 30 / .48); backdrop-filter: blur(4px); }
+.display-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+#display-description { color: var(--ink-soft); }
+.display-sizes { display: flex; gap: 8px; margin: 24px 0; padding: 0; border: 0; }
+.display-sizes legend { margin-bottom: 10px; }
+.display-sizes button { flex: 1; min-height: 46px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); }
+.display-sizes button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.display-spacing { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.display-spacing select { width: auto; min-width: 120px; }
+#display-settings .display-preview { margin: 24px 0; padding: 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+#display-settings-open { flex-shrink: 0; margin-left: auto; letter-spacing: normal; }
+:is(button, a, input, select, textarea):focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
 /* Phase 4.1 — readable at distance, quieter but less rigid */
 body { font-size: calc(14px + var(--ui-boost)); line-height: 1.55; }
 .app-shell { grid-template-columns: 248px minmax(0, 1fr); }
@@ -424,12 +439,14 @@ body { font-size: calc(14px + var(--ui-boost)); line-height: 1.55; }
 .aside-title, .preview-placeholder p, .source-card h3 { font-size: calc(17px + var(--ui-boost)); }
 .idea-main h3, .relation-core { font-size: calc(20px + var(--ui-boost)); }
 .timeline-content h4, .closure-item p { font-size: calc(15px + var(--ui-boost)); }
-.annotation blockquote { font-size: calc(17px + var(--reading-boost)); line-height: 1.82; }
+.annotation blockquote { font-size: calc(17px + var(--reading-boost)); line-height: var(--reading-line-height, 1.85); }
 .review-quote { font-size: clamp(calc(20px + var(--reading-boost)), 3vw, calc(29px + var(--reading-boost))); line-height: 1.7; }
 .inbox-quote { font-size: clamp(calc(20px + var(--reading-boost)), 3vw, calc(28px + var(--reading-boost))); line-height: 1.72; }
 .answer-copy { font-size: calc(17px + var(--reading-boost)); line-height: 1.9; }
 .own-comment, .review-comment { font-size: calc(14px + var(--ui-boost)); line-height: 1.82; }
 input, select, textarea { font-size: calc(14px + var(--ui-boost)); }
+.review-quote, .inbox-quote, .answer-copy, .own-comment, .review-comment { line-height: var(--reading-line-height, 1.85); }
+.annotation-chapter, .detail-aside h3, .preview-stat span { font-size: calc(11px + var(--meta-boost)); }
 .search-field input, select, .key-input, .idea-composer input { min-height: 46px; }
 
 main { max-width: 1480px; padding-inline: clamp(34px, 5.5vw, 92px); }

@@ -6,6 +6,7 @@ import { buildTopicMap, buildTopicTimeline, relatedTopics } from "./map.mjs";
 const STORAGE_KEY = "reading-archive-phase1-v1";
 const THEME_KEY = "reading-archive-theme";
 const TEXT_SIZE_KEY = "reading-archive-text-size";
+const LINE_HEIGHT_KEY = "reading-archive-line-height";
 const clone = (value) => JSON.parse(JSON.stringify(value));
 const statusNames = { reading: "在读", finished: "已读", wishlist: "想读" };
 let archive = loadArchive();
@@ -73,12 +74,20 @@ function applyTextSize(size) {
   const labels = { standard: "标准", comfortable: "舒适", large: "大字" };
   const toggle = document.querySelector("#text-size-toggle");
   if (toggle) toggle.textContent = `显示大小：${labels[resolved]}`;
+  document.querySelectorAll("[data-text-size-option]").forEach(button => {
+    button.setAttribute("aria-pressed", String(button.dataset.textSizeOption === resolved));
+  });
 }
 
-function cycleTextSize() {
-  const sizes = ["standard", "comfortable", "large"];
-  const current = document.documentElement.dataset.textSize || "comfortable";
-  applyTextSize(sizes[(sizes.indexOf(current) + 1) % sizes.length]);
+function applyLineHeight(value) {
+  const resolved = ["1.65", "1.85", "2.05"].includes(value) ? value : "1.85";
+  document.documentElement.style.setProperty("--reading-line-height", resolved);
+  localStorage.setItem(LINE_HEIGHT_KEY, resolved);
+  document.querySelector("#reading-line-height").value = resolved;
+}
+
+function openDisplaySettings() {
+  document.querySelector("#display-settings").showModal();
 }
 
 function loadArchive() {
@@ -770,7 +779,16 @@ document.querySelector("#ai-config-toggle").addEventListener("click", (event) =>
 });
 document.querySelector("#save-openai").addEventListener("click", saveOpenAIConfig);
 document.querySelector("#theme-toggle").addEventListener("click", () => applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"));
-document.querySelector("#text-size-toggle").addEventListener("click", cycleTextSize);
+document.querySelector("#text-size-toggle").addEventListener("click", openDisplaySettings);
+document.querySelector("#display-settings-open").addEventListener("click", openDisplaySettings);
+document.querySelectorAll("[data-text-size-option]").forEach(button => {
+  button.addEventListener("click", () => applyTextSize(button.dataset.textSizeOption));
+});
+document.querySelector("#reading-line-height").addEventListener("change", event => applyLineHeight(event.target.value));
+document.querySelector("#display-reset").addEventListener("click", () => {
+  applyTextSize("comfortable");
+  applyLineHeight("1.85");
+});
 document.querySelector("#new-idea").addEventListener("click", () => {
   const form = document.querySelector("#idea-composer");
   form.hidden = false;
@@ -792,6 +810,7 @@ document.querySelector("#reset-demo").addEventListener("click", () => {
   route("library");
 });
 document.addEventListener("keydown", (event) => {
+  if (document.querySelector("#display-settings").open) return;
   if (event.key === "/" && !["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) { event.preventDefault(); (document.querySelector("#view-ask").classList.contains("active") ? elements.archiveQuery : elements.search).focus(); }
   if (event.key.toLowerCase() === "l" && !["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) route("library");
   if (event.key.toLowerCase() === "i" && !["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) route("import");
@@ -801,6 +820,7 @@ document.addEventListener("keydown", (event) => {
 
 initializeTheme();
 applyTextSize(localStorage.getItem(TEXT_SIZE_KEY) || "comfortable");
+applyLineHeight(localStorage.getItem(LINE_HEIGHT_KEY) || "1.85");
 renderCounts();
 renderLibrary();
 renderToday();

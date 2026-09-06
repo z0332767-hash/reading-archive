@@ -41,6 +41,7 @@
         <span>READING ARCHIVE <b>04.1</b></span>
         <span id="system-record-count">0 RECORDS</span>
         <span class="system-private"><i></i> LOCAL / PRIVATE</span>
+        <button class="text-button" id="display-settings-open" aria-haspopup="dialog" aria-controls="display-settings">阅读显示</button>
       </div>
       <section class="view active" id="view-today" aria-labelledby="today-title">
         <header class="page-header today-header">
@@ -310,6 +311,32 @@
     </main>
   </div>
 
+  <dialog id="display-settings" aria-labelledby="display-title" aria-describedby="display-description">
+    <form method="dialog" class="display-heading">
+      <h2 id="display-title">让阅读更舒服</h2>
+      <button class="button" aria-label="关闭阅读显示设置">关闭</button>
+    </form>
+    <p id="display-description">调整即时生效，并记住在当前浏览器中。</p>
+    <fieldset class="display-sizes">
+      <legend>显示字号</legend>
+      <button type="button" data-text-size-option="standard" aria-pressed="false">标准</button>
+      <button type="button" data-text-size-option="comfortable" aria-pressed="true">舒适</button>
+      <button type="button" data-text-size-option="large" aria-pressed="false">大字</button>
+    </fieldset>
+    <label class="display-spacing" for="reading-line-height">阅读行距
+      <select id="reading-line-height">
+        <option value="1.65">紧凑</option>
+        <option value="1.85" selected>舒展</option>
+        <option value="2.05">宽松</option>
+      </select>
+    </label>
+    <div class="display-preview annotation">
+      <p class="annotation-chapter">效果预览 · 划线与想法</p>
+      <blockquote>读过的书不必全部记住。留下一段文字，写下此刻的想法，让下一次重读有迹可循。</blockquote>
+      <p class="own-comment">好的整理，是让过去的自己与现在重新相遇。</p>
+    </div>
+    <button class="text-button" id="display-reset" type="button">恢复默认显示</button>
+  </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script type="module" src="app.js"></script>
 </body>
