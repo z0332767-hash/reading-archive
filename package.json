@@ -1,0 +1,11 @@
+{
+  "name": "reading-archive",
+  "version": "0.6.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check app.js && node --check server.mjs && node --check core.mjs && node --check search.mjs && node --check map.mjs && node --check openai-provider.mjs && node --test tests/*.test.mjs"
+  }
+}

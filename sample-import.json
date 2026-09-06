@@ -1,0 +1,32 @@
+{
+  "books": [
+    {
+      "id": "book_sample_001",
+      "title": "夜晚的潜水艇",
+      "subtitle": "",
+      "author": "陈春成",
+      "publisher": "上海三联书店",
+      "status": "finished",
+      "progress": 100,
+      "rating": 4,
+      "startedAt": "2026-07-01",
+      "finishedAt": "2026-07-09",
+      "lastReadAt": "2026-07-09",
+      "tags": ["小说", "记忆", "想象"],
+      "summary": "请在这里写下这本书真正留下的东西。"
+    }
+  ],
+  "annotations": [
+    {
+      "bookId": "book_sample_001",
+      "chapter": "夜晚的潜水艇",
+      "originalText": "请替换为你的微信读书划线原文。",
+      "comment": "请替换为你当时写下的点评；没有可以留空。",
+      "type": "comment",
+      "sourceCreatedAt": "2026-07-03",
+      "tags": ["记忆"],
+      "organized": false
+    }
+  ],
+  "reflections": []
+}

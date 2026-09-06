@@ -1,0 +1,21 @@
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies and logs
+node_modules/
+*.log
+npm-debug.log*
+
+# Personal exports and packaged releases
+upload/
+reading-archive-*.zip
+reading-archive-*.json
+reading-archive-*.md
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f2efe8">
+  <title>Reading Archive</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="主导航">
+      <div class="brand" data-route="library" role="button" tabindex="0" aria-label="返回书库">
+        <span class="brand-mark">R/A</span>
+        <span><strong>Reading Archive</strong><small>PERSONAL KNOWLEDGE OS</small></span>
+      </div>
+
+      <nav class="main-nav">
+        <button class="nav-item active" data-route="today"><span>今天</span><kbd>T</kbd></button>
+        <button class="nav-item" data-route="library"><span>书库</span><kbd>L</kbd></button>
+        <button class="nav-item" data-route="inbox"><span>待整理</span><span class="nav-count" id="inbox-count">0</span></button>
+        <button class="nav-item" data-route="ideas"><span>观点与问题</span><span class="nav-count quiet" id="idea-count">0</span></button>
+        <button class="nav-item" data-route="map"><span>思想地图</span><kbd>M</kbd></button>
+        <button class="nav-item" data-route="ask"><span>检索与提问</span><kbd>/</kbd></button>
+        <button class="nav-item" data-route="sync"><span>微信读书</span><span class="sync-dot" id="sync-dot" aria-label="未连接"></span></button>
+        <button class="nav-item" data-route="import"><span>导入</span><kbd>I</kbd></button>
+      </nav>
+
+      <div class="sidebar-foot">
+        <div class="archive-status"><span class="status-dot"></span><span>本地档案已保存</span></div>
+        <button class="text-button" id="text-size-toggle">显示大小：舒适</button>
+        <button class="text-button" id="theme-toggle">切换深色模式</button>
+        <button class="text-button" id="export-json">导出 JSON</button>
+        <button class="text-button" id="export-markdown">导出 Markdown</button>
+        <button class="text-button muted" id="reset-demo">恢复示例数据</button>
+      </div>
+    </aside>
+
+    <main id="main" tabindex="-1">
+      <div class="system-bar" aria-label="系统状态">
+        <span>READING ARCHIVE <b>04.1</b></span>
+        <span id="system-record-count">0 RECORDS</span>
+        <span class="system-private"><i></i> LOCAL / PRIVATE</span>
+      </div>
+      <section class="view active" id="view-today" aria-labelledby="today-title">
+        <header class="page-header today-header">
+          <div>
+            <p class="eyebrow" id="today-date">ARCHIVE / TODAY</p>
+            <h1 id="today-title">今天</h1>
+            <p class="page-intro">从过去的阅读中，取回几件仍值得思考的事。</p>
+          </div>
+          <span class="today-progress" id="today-progress"></span>
+        </header>
+        <div class="today-layout">
+          <section class="review-column" id="today-reviews" aria-live="polite"></section>
+          <aside class="today-aside">
+            <section id="closure-prompt"></section>
+            <section id="recent-ideas"></section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="view-library" aria-labelledby="library-title">
+        <header class="page-header">
+          <div>
+            <p class="eyebrow">ARCHIVE / LIBRARY</p>
+            <h1 id="library-title">书库</h1>
+            <p class="page-intro" id="library-summary"></p>
+          </div>
+          <button class="button primary" data-route="import">导入阅读记录</button>
+        </header>
+
+        <div class="filter-bar" aria-label="书库筛选">
+          <label class="search-field">
+            <span class="sr-only">搜索书籍与笔记</span>
+            <input id="book-search" type="search" placeholder="搜索书名、作者、划线或想法…" autocomplete="off">
+            <span class="search-key">/</span>
+          </label>
+          <select id="status-filter" aria-label="阅读状态">
+            <option value="">全部状态</option>
+            <option value="reading">在读</option>
+            <option value="finished">已读</option>
+            <option value="wishlist">想读</option>
+          </select>
+          <select id="tag-filter" aria-label="主题标签"><option value="">全部主题</option></select>
+        </div>
+
+        <div class="library-meta">
+          <span id="result-count"></span>
+          <span>按最近阅读排序</span>
+        </div>
+        <div class="book-list" id="book-list" aria-live="polite"></div>
+        <div class="empty-state" id="library-empty" hidden>
+          <p>没有找到相符的档案。</p>
+          <button class="text-button" id="clear-filters">清除筛选</button>
+        </div>
+      </section>
+
+      <section class="view" id="view-ideas" aria-labelledby="ideas-title">
+        <header class="page-header compact">
+          <div>
+            <p class="eyebrow">ARCHIVE / IDEAS</p>
+            <h1 id="ideas-title">观点与问题</h1>
+            <p class="page-intro">让一个想法可以跨越书籍继续生长，而不只停留在某一页划线里。</p>
+          </div>
+          <button class="button primary" id="new-idea">新建一条</button>
+        </header>
+        <form class="idea-composer" id="idea-composer" hidden>
+          <div class="organize-grid">
+            <div><label class="field-label" for="idea-type">类型</label><select id="idea-type" name="type"><option value="claim">观点</option><option value="question">问题</option></select></div>
+            <div><label class="field-label" for="idea-title">标题</label><input id="idea-title" name="title" required placeholder="一句可以继续讨论的话"></div>
+          </div>
+          <div><label class="field-label" for="idea-content">展开说明</label><textarea id="idea-content" name="content" rows="3" placeholder="它为什么重要？目前有什么证据或疑问？"></textarea></div>
+          <div class="inline-actions"><button class="button primary" type="submit">保存</button><button class="text-button muted" type="button" id="cancel-idea">取消</button></div>
+        </form>
+        <div class="idea-toolbar" role="group" aria-label="筛选观点与问题">
+          <button class="idea-filter active" data-idea-filter="all">全部</button>
+          <button class="idea-filter" data-idea-filter="claim">观点</button>
+          <button class="idea-filter" data-idea-filter="question">问题</button>
+        </div>
+        <div class="idea-list" id="idea-list" aria-live="polite"></div>
+      </section>
+
+      <section class="view" id="view-ask" aria-labelledby="ask-title">
+        <header class="page-header compact ask-header">
+          <div>
+            <p class="eyebrow">ARCHIVE / SEARCH</p>
+            <h1 id="ask-title">检索与提问</h1>
+            <p class="page-intro">从整份阅读档案中找回证据。每条回答都可以回到原始书籍、划线或你的想法。</p>
+          </div>
+          <span class="index-state" id="index-state">LOCAL INDEX</span>
+        </header>
+
+        <section class="ask-console">
+          <form class="ask-form" id="archive-search-form">
+            <label class="field-label" for="archive-query">向阅读档案提问</label>
+            <div class="ask-input-row">
+              <textarea id="archive-query" rows="2" placeholder="例如：我对记忆的看法发生过什么变化？" required></textarea>
+              <button class="button primary" id="run-archive-search" type="submit">查询档案</button>
+            </div>
+            <div class="query-examples" aria-label="问题示例">
+              <button type="button" class="query-chip" data-query="我对记忆的看法发生过什么变化？">记忆观念的变化</button>
+              <button type="button" class="query-chip" data-query="有哪些尚未回答的问题？">尚未回答的问题</button>
+              <button type="button" class="query-chip" data-query="哪些内容适合继续写作？">适合继续写作</button>
+            </div>
+          </form>
+
+          <div class="ask-controls">
+            <div class="scope-switch" role="group" aria-label="搜索范围">
+              <button class="scope-button active" data-search-scope="all">全部档案</button>
+              <button class="scope-button" data-search-scope="mine">只看我的话</button>
+              <button class="scope-button" data-search-scope="original">作者原文</button>
+              <button class="scope-button" data-search-scope="books">书籍</button>
+              <button class="scope-button" data-search-scope="ideas">观点 / 问题</button>
+            </div>
+            <label class="ai-switch"><input id="use-ai" type="checkbox" disabled><span><strong>AI 综合回答</strong><small id="ai-mode-status">未配置时使用本地摘要</small></span></label>
+          </div>
+        </section>
+
+        <section class="ai-config" id="ai-config">
+          <button class="ai-config-toggle" id="ai-config-toggle" type="button" aria-expanded="false">配置可选 AI 综合能力 <span>＋</span></button>
+          <div class="ai-config-body" id="ai-config-body" hidden>
+            <div>
+              <p class="section-number">OPTIONAL / OPENAI</p>
+              <h2>让档案回答跨来源问题</h2>
+              <p>只有当前查询命中的最多 12 条来源片段会发送给 OpenAI，不会上传整份档案。API Key 仅保存在本机 <code>.env.local</code>，不会进入浏览器数据或导出文件。</p>
+            </div>
+            <div class="ai-config-fields">
+              <label class="field-label" for="openai-key">OpenAI API Key</label>
+              <input class="key-input" id="openai-key" type="password" placeholder="sk-••••••••" autocomplete="off" spellcheck="false">
+              <label class="field-label" for="openai-model">模型</label>
+              <input class="key-input" id="openai-model" value="gpt-5.6" autocomplete="off" spellcheck="false">
+              <div class="inline-actions"><button class="button primary" id="save-openai" type="button">安全保存</button><span class="inline-status" id="openai-config-status" role="status"></span></div>
+            </div>
+          </div>
+        </section>
+
+        <div class="ask-output" id="ask-output" aria-live="polite">
+          <div class="ask-empty"><span>READY</span><h2>先提出一个你真正关心的问题</h2><p>本地检索无需任何 API。开启 AI 后，它会在已有证据之间寻找一致、变化与分歧。</p></div>
+        </div>
+        <section class="source-section" id="source-section" hidden>
+          <div class="source-heading"><p class="eyebrow">TRACEABLE SOURCES</p><span id="source-count"></span></div>
+          <div class="source-list" id="source-list"></div>
+        </section>
+      </section>
+
+      <section class="view" id="view-map" aria-labelledby="map-title">
+        <header class="page-header compact map-header">
+          <div>
+            <p class="eyebrow">ARCHIVE / THOUGHT MAP</p>
+            <h1 id="map-title">思想地图</h1>
+            <p class="page-intro">看见主题如何跨越书籍反复出现，以及你的判断怎样随时间形成、存疑和改变。</p>
+          </div>
+          <div class="map-stats" id="map-stats"></div>
+        </header>
+
+        <div class="map-layout">
+          <aside class="topic-index">
+            <div class="topic-index-head"><span>TOPICS</span><small>按跨书连接排序</small></div>
+            <div class="topic-list" id="topic-list" role="listbox" aria-label="阅读主题"></div>
+          </aside>
+          <section class="topic-workspace" id="topic-workspace" aria-live="polite"></section>
+        </div>
+      </section>
+
+      <section class="view" id="view-detail" aria-labelledby="detail-title">
+        <button class="back-button" data-route="library">← 返回书库</button>
+        <div id="book-detail"></div>
+      </section>
+
+      <section class="view" id="view-inbox" aria-labelledby="inbox-title">
+        <header class="page-header compact">
+          <div>
+            <p class="eyebrow">ARCHIVE / INBOX</p>
+            <h1 id="inbox-title">待整理</h1>
+            <p class="page-intro">把划线转化为自己的语言。一次只处理一条。</p>
+          </div>
+          <button class="button" data-route="import">继续导入</button>
+        </header>
+        <div id="inbox-workspace"></div>
+      </section>
+
+      <section class="view" id="view-import" aria-labelledby="import-title">
+        <header class="page-header compact">
+          <div>
+            <p class="eyebrow">ARCHIVE / IMPORT</p>
+            <h1 id="import-title">导入阅读记录</h1>
+            <p class="page-intro">先预览，再写入。原始内容不会被 AI 改写。</p>
+          </div>
+        </header>
+
+        <div class="import-layout">
+          <section class="import-panel">
+            <div class="section-number">01</div>
+            <h2>选择数据</h2>
+            <p>上传符合模板的 JSON，或直接粘贴 JSON 内容。</p>
+            <label class="file-drop" for="import-file">
+              <strong>选择 JSON 文件</strong>
+              <span>文件只在当前浏览器中处理</span>
+              <input id="import-file" type="file" accept="application/json,.json">
+            </label>
+            <div class="divider"><span>或者</span></div>
+            <label class="field-label" for="import-text">粘贴 JSON</label>
+            <textarea id="import-text" rows="9" spellcheck="false" placeholder='{ "books": [...], "annotations": [...] }'></textarea>
+            <div class="inline-actions">
+              <button class="button primary" id="preview-import">检查并预览</button>
+              <a class="text-link" href="sample-import.json" download>下载导入模板</a>
+            </div>
+            <p class="form-error" id="import-error" role="alert"></p>
+          </section>
+
+          <section class="import-panel preview-panel" aria-live="polite">
+            <div class="section-number">02</div>
+            <h2>导入预览</h2>
+            <div id="import-placeholder" class="preview-placeholder">
+              <p>尚未检查数据</p>
+              <span>新增、重复和错误会显示在这里。</span>
+            </div>
+            <div id="import-preview" hidden></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="view-sync" aria-labelledby="sync-title">
+        <header class="page-header compact">
+          <div>
+            <p class="eyebrow">ARCHIVE / WEREAD</p>
+            <h1 id="sync-title">微信读书同步</h1>
+            <p class="page-intro">通过微信读书官方只读接口读取书籍、阅读进度、划线与个人想法。同步前先预览，不会改动微信读书中的任何内容。</p>
+          </div>
+        </header>
+
+        <div class="sync-layout">
+          <section class="sync-panel">
+            <div class="section-number">01 / CONNECTION</div>
+            <div class="sync-heading"><h2>账号连接</h2><span class="connection-state" id="connection-state">正在检查…</span></div>
+            <p>API Key 只保存在本机项目的 <code>.env.local</code>，页面不会读取或显示完整密钥。</p>
+            <div id="key-setup">
+              <ol class="setup-steps">
+                <li>打开微信读书官方 Skill 页面并使用微信扫码登录。</li>
+                <li>生成以 <code>wrk-</code> 开头的 API Key。</li>
+                <li>粘贴到下方，连接成功后即从输入框清除。</li>
+              </ol>
+              <a class="button" href="https://weread.qq.com/r/weread-skills" target="_blank" rel="noreferrer">打开官方授权页面 ↗</a>
+              <label class="field-label key-label" for="weread-key">微信读书 API Key</label>
+              <input class="key-input" id="weread-key" type="password" placeholder="wrk-••••••••" autocomplete="off" spellcheck="false">
+              <div class="inline-actions"><button class="button primary" id="connect-weread">验证并安全保存</button><span class="inline-status" id="connect-status" role="status"></span></div>
+            </div>
+          </section>
+
+          <section class="sync-panel">
+            <div class="section-number">02 / SCOPE</div>
+            <h2>同步范围</h2>
+            <p>首次建议先同步最近 20 本，确认字段和整理效果后再同步全部。</p>
+            <div class="sync-options">
+              <label class="option-row"><span><strong>有笔记的书</strong><small>书籍信息、阅读进度、划线和个人想法</small></span><select id="sync-limit"><option value="20">最近 20 本</option><option value="50">最近 50 本</option><option value="0">全部有笔记的书</option></select></label>
+              <label class="option-row"><span><strong>同时导入整个书架</strong><small>没有笔记的书也会进入书库</small></span><input id="include-shelf" type="checkbox"></label>
+            </div>
+            <button class="button primary sync-button" id="start-sync" disabled>读取并预览</button>
+            <p class="form-error" id="sync-error" role="alert"></p>
+          </section>
+        </div>
+
+        <section class="sync-preview-section" id="sync-preview-section" hidden aria-live="polite">
+          <div class="section-number">03 / PREVIEW</div>
+          <div class="sync-heading"><h2>同步预览</h2><span id="sync-source-summary"></span></div>
+          <div id="sync-preview"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
