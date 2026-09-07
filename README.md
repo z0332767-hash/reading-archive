@@ -31,7 +31,7 @@ Reading Archive 从这个困扰出发，把书籍、划线、点评、问题和�
 
 打开 [Windows 安装包构建列表](https://github.com/z0332767-hash/reading-archive/actions/workflows/windows.yml)，选择成功的任务，在 **Artifacts** 下载 `Reading-Archive-Windows-x64`。解压后运行其中的安装程序，再从桌面图标启动，无需自行安装 Node.js。
 
-**目前仓库为私有，下载需要仓库访问权限。** 这不是面向所有人的公开下载入口。构建产物保留 30 天；首版未签名，尚需 Windows 交互实机验收，暂不含自动更新。
+**仓库现已公开。** 当前安装包通过 GitHub Actions 提供，下载时可能需要登录 GitHub。构建产物保留 30 天；首版未签名，尚需 Windows 交互实机验收，暂不含自动更新。手机与 PC 云端同步版正在筹备，当前版本仍使用设备本地档案。
 
 旧版用户请先导出 JSON，再在桌面版导入。详细步骤见 [安装与迁移](docs/GUIDE.md)。
 
