@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+<title id="title">Reading Archive 阅读整理示意</title><desc id="desc">保存划线，整理成问题，再回顾想法。虚构示例，非界面截图。</desc>
+<rect width="1200" height="650" rx="24" fill="#101722"/>
+<g font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<text x="58" y="75" fill="#93acff" font-size="18" letter-spacing="3">READING ARCHIVE / 0.7.0</text>
+<text x="58" y="144" fill="#f3f6fb" font-size="42">划线之后，继续想下去。</text>
+<text x="58" y="191" fill="#adb9ca" font-size="21">把一段文字，变成自己的问题，再留给未来的自己。</text>
+<g fill="#1a2535" stroke="#35445c"><rect x="58" y="246" width="338" height="288" rx="14"/><rect x="431" y="246" width="338" height="288" rx="14"/><rect x="804" y="246" width="338" height="288" rx="14"/></g>
+<g fill="#93acff" font-size="17"><text x="84" y="286">01 / 保存</text><text x="457" y="286">02 / 整理</text><text x="830" y="286">03 / 回顾</text></g>
+<g fill="#f3f6fb" font-size="25"><text x="84" y="340">留住当时的触动</text><text x="457" y="340">形成自己的问题</text><text x="830" y="340">记下后来的变化</text></g>
+<g fill="#c4cedc" font-size="21"><text x="84" y="393">记录可以保存一个瞬间，</text><text x="84" y="427">却不能代替后来的理解。</text><text x="457" y="393">什么样的记录，</text><text x="457" y="427">值得我再看一次？</text><text x="830" y="393">不必追求完整，</text><text x="830" y="427">也许只需重新提问。</text></g>
+<g fill="#93acff" font-size="17"><text x="84" y="494">原文与点评分开展示</text><text x="457" y="494">问题保留书籍来源</text><text x="830" y="494">保留新的回应与判断</text></g>
+<text x="58" y="594" fill="#adb9ca" font-size="17">功能示意 · 原创虚构示例，非实际界面截图</text><text x="925" y="594" fill="#adb9ca" font-size="17">个人项目 / Windows</text>
+</g></svg>
