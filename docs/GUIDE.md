@@ -4,7 +4,7 @@
 
 ## 第一次使用
 
-当前提供 Windows x64 0.7.0 预览版。进入 [Windows installer](https://github.com/z0332767-hash/reading-archive/actions/workflows/windows.yml)，打开成功构建，在 Artifacts 下载 `Reading-Archive-Windows-x64`。
+当前提供 Windows x64 0.7.1 预览版。进入 [Windows installer](https://github.com/z0332767-hash/reading-archive/actions/workflows/windows.yml)，打开成功构建，在 Artifacts 下载 `Reading-Archive-Windows-x64`。
 
 解压 ZIP 后运行其中的 `.exe`，按向导安装，再通过桌面图标启动。无需安装 Node.js。仓库已经公开；Actions 构建产物保留 30 天，下载时可能需要登录 GitHub。
 

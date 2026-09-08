@@ -1,6 +1,6 @@
 {
   "name": "reading-archive",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "A personal reading archive for highlights and ideas",
   "author": "Reading Archive",
   "main": "desktop/main.cjs",
@@ -13,14 +13,42 @@
     "test": "node --test tests/*.test.mjs",
     "check": "node --check app.js && node --check server.mjs && node --check core.mjs && node --check search.mjs && node --check map.mjs && node --check openai-provider.mjs && node --test tests/*.test.mjs"
   },
-  "devDependencies": { "electron": "44.2.0", "electron-builder": "26.15.3" },
+  "devDependencies": {
+    "electron": "44.2.0",
+    "electron-builder": "26.15.3"
+  },
   "build": {
     "appId": "com.readingarchive.desktop",
     "productName": "Reading Archive",
     "asar": true,
-    "directories": { "output": "dist" },
-    "files": ["desktop/**", "index.html", "styles.css", "app.js", "data.js", "core.mjs", "search.mjs", "map.mjs", "server.mjs", "weread.mjs", "openai-provider.mjs", "sample-import.json", "package.json"],
-    "win": { "target": "nsis", "artifactName": "Reading-Archive-Setup-${version}-${arch}.${ext}" },
-    "nsis": { "oneClick": false, "perMachine": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true, "deleteAppDataOnUninstall": false }
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "desktop/**",
+      "index.html",
+      "styles.css",
+      "app.js",
+      "data.js",
+      "core.mjs",
+      "search.mjs",
+      "map.mjs",
+      "server.mjs",
+      "weread.mjs",
+      "openai-provider.mjs",
+      "sample-import.json",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "artifactName": "Reading-Archive-Setup-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "deleteAppDataOnUninstall": false
+    }
   }
 }

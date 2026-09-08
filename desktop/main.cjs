@@ -1,4 +1,5 @@
 const { app, BrowserWindow, dialog, Menu, session, shell } = require('electron');
+const { openDouban } = require('./douban.cjs');
 const { randomBytes } = require('node:crypto');
 const { join } = require('node:path');
 const { pathToFileURL } = require('node:url');
@@ -43,6 +44,7 @@ if (!app.requestSingleInstanceLock()) {
     });
     Menu.setApplicationMenu(Menu.buildFromTemplate([
       { label: '阅读档案', submenu: [
+        { label: '豆瓣连接验证（实验）', click: openDouban },
         { label: '打开数据目录', click: () => shell.openPath(dataDir) },
         { label: '迁移旧版数据', click: () => dialog.showMessageBox(window, { type: 'info', title: '导入旧档案', message: '先在原浏览器版本点击“导出 JSON”，再在桌面版“导入”页面选择该文件并确认预览。', detail: '升级不会清除桌面版数据。请定期导出备份。微信读书与 AI 连接需要在桌面版重新配置。' }) },
         { type: 'separator' }, { role: 'quit', label: '退出' }
